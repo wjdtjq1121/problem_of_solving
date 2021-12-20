@@ -2,22 +2,39 @@ import java.util.*;
 import java.io.*;
 
 class Solution {
-    public int[] solution(String s) {
-        Set<String> set = new HashSet<>();
-        String token[] = s.replaceAll("[{]", " ").replaceAll("[}]", " ").trim().split(" , ");
+    public int solution(int[] stones, int k) {
+        int answer = 0;
+        int min = 1;
+        int max = 200000000;
         
-        Arrays.sort(token, (a, b)->{
-            return a.length() - b.length();
-        });        
-        int answer[] = new int[token.length];
-        
-        int index = 0;
-        for(String s1: token) {
-            for(String s2: s1.split(",")) {
-                if(set.add(s2))
-                    answer[index++] = Integer.parseInt(s2);
-            }
+        while(min <= max) {
+            int mid = (min + max) / 2;
+            
+            if(canCross(stones, k, mid)) {
+                min = mid + 1;
+                answer = Math.max(mid, answer);
+            } else {
+                max = mid - 1;
+            }            
         }
         return answer;
     }
+    boolean canCross(int stones[], int k, int mid) {
+        
+        int jump = 0;
+        for(int stone: stones) {
+            
+            if(stone - mid < 0) {
+                jump++;
+            } else {
+                jump = 0;
+            }
+            if(jump == k)
+                return false;
+            
+        }
+        return true;
+        
+    }
+    
 }
